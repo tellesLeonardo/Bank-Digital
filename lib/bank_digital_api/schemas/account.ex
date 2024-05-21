@@ -11,6 +11,8 @@ defmodule BankDigitalApi.Schemas.Account do
     field :account_number, :integer, primary_key: true
     field :balance, :decimal
 
+    has_one :transaction, BankDigitalApi.Transaction
+
     timestamps()
   end
 
