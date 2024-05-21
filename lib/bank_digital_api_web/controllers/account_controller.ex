@@ -1,7 +1,7 @@
 defmodule BankDigitalApiWeb.AccountController do
   use BankDigitalApiWeb, :controller
 
-  alias BankDigitalApi.Schema.Account
+  alias BankDigitalApi.Schemas.Account
   alias BankDigitalApi.Repo
 
   action_fallback BankDigitalApiWeb.FallbackController
