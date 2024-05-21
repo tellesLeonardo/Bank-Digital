@@ -1,7 +1,7 @@
 defmodule BankDigitalApi.Schema.Transaction do
   @moduledoc """
     schema da tabela de trasação
-    Os metodo de pagamento são C de Crédito, D de Débito, B de Boleto
+    Os metodo de pagamento são C de Crédito, D de Débito, P de Pix
   """
 
   use Ecto.Schema
@@ -9,7 +9,7 @@ defmodule BankDigitalApi.Schema.Transaction do
 
   @fields_required ~w(account_number payment_method amount)a
   @fields ~w(timestamp)a
-  @payment_methods ~w(C D B)
+  @payment_methods ~w(C D P)
 
   schema "transaction" do
     field :account_number, :integer
