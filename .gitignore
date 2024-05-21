@@ -35,3 +35,4 @@ bank_digital_api-*.tar
 npm-debug.log
 /assets/node_modules/
 
+README.md
