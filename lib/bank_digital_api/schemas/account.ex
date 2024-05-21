@@ -1,4 +1,7 @@
-defmodule BankDigitalApi.Schema.Account do
+defmodule BankDigitalApi.Schemas.Account do
+  @moduledoc """
+    schema da tabela de account
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

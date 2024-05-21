@@ -1,4 +1,4 @@
-defmodule BankDigitalApi.Schema.Transaction do
+defmodule BankDigitalApi.Schemas.Transaction do
   @moduledoc """
     schema da tabela de trasação
     Os metodo de pagamento são C de Crédito, D de Débito, B de Boleto
