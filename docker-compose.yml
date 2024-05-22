@@ -8,7 +8,7 @@ services:
     working_dir: /app
     command: /bin/sh docker_dev_start.sh
     environment:
-      PORT: "4000"  # Porta padrão para o servidor Phoenix
+      PORT: 5432
       HOST: "postgresql_db"
       DATABASE_URL: "postgres://postgres:postgres@postgresql_db:5432/bank_digital_dev"
     depends_on:

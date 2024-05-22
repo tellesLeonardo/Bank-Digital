@@ -6,7 +6,7 @@ config :bank_digital_api, BankDigitalApi.Repo,
   password: "postgres",
   hostname: "localhost",
   hostname: System.get_env("HOST", "localhost"),
-  port: System.get_env("HOST", "5432"),
+  port: System.get_env("PORT", "5432"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
