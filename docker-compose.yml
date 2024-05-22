@@ -18,6 +18,23 @@ services:
     networks:
       - bank_network
 
+  elixir_test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      PORT: 5432
+      HOST: "postgresql_db"
+      MIX_ENV: "test"
+      DATABASE_URL: "postgres://postgres:postgres@postgresql_db:5432/bank_digital_test"
+    depends_on:
+      - postgresql_db
+    networks:
+      - bank_network
+
   postgresql_db:
     image: postgres:13
     container_name: postgresql_db

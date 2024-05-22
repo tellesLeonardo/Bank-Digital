@@ -11,7 +11,7 @@ defmodule BankDigitalApi.Schemas.Account do
   schema "account" do
     field :saldo, :decimal
 
-    has_one :transaction, BankDigitalApi.Schemas.Transaction
+    has_one :transaction, BankDigitalApi.Schemas.Transaction, foreign_key: :numero_conta
 
     timestamps()
   end

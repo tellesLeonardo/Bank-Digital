@@ -20,7 +20,7 @@ defmodule BankDigitalApi.Schemas.Transaction do
     field :valor, :decimal
     field :timestamp, :naive_datetime
 
-    belongs_to :account, BankDigitalApi.Schemas.Account, foreign_key: :numero_conta
+    belongs_to :account, BankDigitalApi.Schemas.Account, foreign_key: :numero_conta, references: :numero_conta
 
     timestamps()
   end
