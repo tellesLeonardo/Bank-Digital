@@ -3,8 +3,8 @@ defmodule BankDigitalApi.Repo.Migrations.CreateAccount do
 
   def change do
     create table(:account, primary_key: false) do
-      add :account_number, :integer, primary_key: true
-      add :balance, :decimal, precision: 10, scale: 2, null: false
+      add :numero_conta, :integer, primary_key: true
+      add :saldo, :decimal, precision: 10, scale: 2, null: false
 
       timestamps()
     end

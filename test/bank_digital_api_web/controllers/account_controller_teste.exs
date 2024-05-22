@@ -5,8 +5,8 @@ defmodule BankDigitalApiWeb.AccountControllerTest do
 
   alias BankDigitalApi.Service.Account
 
-  @create_attrs %{account_number: 12345, balance: "1000.00"}
-  @invalid_attrs %{account_number: nil, balance: nil}
+  @create_attrs %{numero_conta: 12345, saldo: "1000.00"}
+  @invalid_attrs %{numero_conta: nil, saldo: nil}
 
   describe "create account" do
     test "renders account when data is valid and account does not exist", %{conn: conn} do
@@ -20,7 +20,7 @@ defmodule BankDigitalApiWeb.AccountControllerTest do
     end
 
     test "renders account when account already exists", %{conn: conn} do
-      insert(:account, account_number: 12345, balance: "1000.00")
+      insert(:account, numero_conta: 12345, saldo: "1000.00")
       conn = post(conn, ~p"/conta", @create_attrs)
       assert %{"numero_conta" => 12345, "saldo" => "1000.00"} = json_response(conn, 201)
     end
@@ -33,15 +33,15 @@ defmodule BankDigitalApiWeb.AccountControllerTest do
 
   describe "show account" do
     test "renders account", %{conn: conn} do
-      account = insert(:account, account_number: 12345, balance: "1000.00")
+      account = insert(:account, numero_conta: 12345, saldo: "1000.00")
 
-      conn = get(conn, ~p"/conta?account_number=#{account.account_number}")
+      conn = get(conn, ~p"/conta?numero_conta=#{account.numero_conta}")
 
       assert %{"numero_conta" => 12345, "saldo" => "1000.00"} = json_response(conn, 200)
     end
 
     test "no account", %{conn: conn} do
-      insert(:account, account_number: 12345, balance: "1000.00")
+      insert(:account, numero_conta: 12345, saldo: "1000.00")
 
       conn = get(conn, ~p"/conta")
 
@@ -49,7 +49,7 @@ defmodule BankDigitalApiWeb.AccountControllerTest do
     end
 
     test "renders 404 when account does not exist", %{conn: conn} do
-      conn = get(conn, ~p"/conta?account_number=96287")
+      conn = get(conn, ~p"/conta?numero_conta=96287")
 
       assert %{"error" => "Not Found"} == json_response(conn, 404)
     end

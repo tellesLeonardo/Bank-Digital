@@ -4,14 +4,14 @@ defmodule BankDigitalApi.Schemas.TransactionTest do
   import BankDigitalApi.Factory
   alias BankDigitalApi.Schemas.Transaction
 
-  @valid_attrs %{account_number: nil, payment_method: "C", amount: 100.00}
-  @invalid_attrs %{account_number: nil, payment_method: nil, amount: nil}
+  @valid_attrs %{numero_conta: nil, forma_pagamento: "C", valor: 100.00}
+  @invalid_attrs %{numero_conta: nil, forma_pagamento: nil, valor: nil}
 
   setup do
     account = insert(:account)
 
     valid_attrs =
-      Map.put(@valid_attrs, :account_number, account.account_number)
+      Map.put(@valid_attrs, :numero_conta, account.numero_conta)
 
     {:ok, account: account, valid_attrs: valid_attrs}
   end
@@ -30,14 +30,14 @@ defmodule BankDigitalApi.Schemas.TransactionTest do
     changeset = Transaction.changeset(%Transaction{}, %{})
 
     assert %{
-             account_number: ["can't be blank"],
-             payment_method: ["can't be blank"],
-             amount: ["can't be blank"]
+             numero_conta: ["can't be blank"],
+             forma_pagamento: ["can't be blank"],
+             valor: ["can't be blank"]
            } = errors_on(changeset)
   end
 
-  test "validates payment_method inclusion" do
-    changeset = Transaction.changeset(%Transaction{}, %{payment_method: "X"})
-    assert %{payment_method: ["is invalid"]} = errors_on(changeset)
+  test "validates forma_pagamento inclusion" do
+    changeset = Transaction.changeset(%Transaction{}, %{forma_pagamento: "X"})
+    assert %{forma_pagamento: ["is invalid"]} = errors_on(changeset)
   end
 end

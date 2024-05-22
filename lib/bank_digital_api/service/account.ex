@@ -18,8 +18,8 @@ defmodule BankDigitalApi.Service.Account do
   """
   def validate_account_exists(nil), do: {:error, :not_found}
 
-  def validate_account_exists(account_number) do
-    case Repo.get(Account, account_number) do
+  def validate_account_exists(numero_conta) do
+    case Repo.get(Account, numero_conta) do
       nil -> {:error, :not_found}
       %Account{} = account -> {:ok, account}
     end

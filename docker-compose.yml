@@ -1,6 +1,23 @@
 version: '3.8'
 
 services:
+  elixir_app:
+    image: leotf159/bank_digital:2.0
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: /bin/sh docker_dev_start.sh
+    environment:
+      PORT: "4000"  # Porta padrão para o servidor Phoenix
+      HOST: "postgresql_db"
+      DATABASE_URL: "postgres://postgres:postgres@postgresql_db:5432/bank_digital_dev"
+    depends_on:
+      - postgresql_db
+    ports:
+      - "4000:4000"
+    networks:
+      - bank_network
+
   postgresql_db:
     image: postgres:13
     container_name: postgresql_db
@@ -16,7 +33,6 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - bank_network
-
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -36,7 +52,6 @@ services:
 networks:
   bank_network:
     driver: bridge
-
 
 volumes:
   postgres_data:
