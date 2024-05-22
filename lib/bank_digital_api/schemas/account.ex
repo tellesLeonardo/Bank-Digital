@@ -5,7 +5,7 @@ defmodule BankDigitalApi.Schemas.Account do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @fields_required ~w(saldo numero_conta)a
+  @required_fields ~w(saldo numero_conta)a
   @primary_key {:numero_conta, :integer, autogenerate: false}
 
   schema "account" do
@@ -19,8 +19,8 @@ defmodule BankDigitalApi.Schemas.Account do
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, @fields_required)
-    |> validate_required(@fields_required)
+    |> cast(attrs, @required_fields)
+    |> validate_required(@required_fields)
     |> unique_constraint(:numero_conta, name: "account_pkey")
   end
 end

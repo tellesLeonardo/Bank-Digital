@@ -48,8 +48,8 @@ defmodule BankDigitalApi.Service.Transaction do
     Retorna um tupla informando quanto é o valor de valor com taxa
   """
   def validate_sufficient_funds(%AccountSchema{} = account, attrs) do
-    with {:ok, total_valor} <- calculate_total_valor(attrs.valor, attrs.forma_pagamento),
-         :ok <- ensure_sufficient_funds(account, total_valor) do
+    with {:ok, total_valor} <- calculate_total_amount(attrs.valor, attrs.forma_pagamento),
+         :ok <- check_funds(account, total_valor) do
       {:ok, total_valor}
     else
       {:error, _} = error -> error
@@ -82,10 +82,10 @@ defmodule BankDigitalApi.Service.Transaction do
     |> Repo.insert()
   end
 
-  defp calculate_total_valor(valor, forma_pagamento) do
+  defp calculate_total_amount(valor, forma_pagamento) do
     case Transaction.get_tax(forma_pagamento) do
       :invalid_tax ->
-        {:error, :invalid_forma_pagamento}
+        {:error, :invalid_payment_method}
 
       tax ->
         tax_value = Decimal.mult(valor, Decimal.new(tax))
@@ -99,7 +99,7 @@ defmodule BankDigitalApi.Service.Transaction do
     end
   end
 
-  defp ensure_sufficient_funds(%AccountSchema{saldo: saldo}, total_valor) do
+  defp check_funds(%AccountSchema{saldo: saldo}, total_valor) do
     if Decimal.compare(saldo, total_valor) != :lt, do: :ok, else: {:error, :insufficient_funds}
   end
 end

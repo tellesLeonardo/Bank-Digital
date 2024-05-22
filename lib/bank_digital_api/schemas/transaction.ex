@@ -10,17 +10,19 @@ defmodule BankDigitalApi.Schemas.Transaction do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @fields_required ~w(numero_conta forma_pagamento valor)a
-  @fields_optional ~w(timestamp)a
-  @forma_pagamentos ~w(C D P)
-  @map_tax %{"C" => :tax_credito, "D" => :tax_debito, "P" => :tax_pix}
+  @required_fields ~w(numero_conta forma_pagamento valor)a
+  @optional_fields ~w(timestamp)a
+  @payment_methods ~w(C D P)
+  @payment_method_taxes %{"C" => :tax_credito, "D" => :tax_debito, "P" => :tax_pix}
 
   schema "transaction" do
     field :forma_pagamento, :string
     field :valor, :decimal
     field :timestamp, :naive_datetime
 
-    belongs_to :account, BankDigitalApi.Schemas.Account, foreign_key: :numero_conta, references: :numero_conta
+    belongs_to :account, BankDigitalApi.Schemas.Account,
+      foreign_key: :numero_conta,
+      references: :numero_conta
 
     timestamps()
   end
@@ -28,23 +30,23 @@ defmodule BankDigitalApi.Schemas.Transaction do
   @doc false
   def changeset(transaction, attrs) do
     transaction
-    |> cast(attrs, @fields_required ++ @fields_optional)
-    |> validate_required(@fields_required)
+    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields)
     |> validate_length(:forma_pagamento, max: 1, message: message_error_forma_pagamentos())
-    |> validate_inclusion(:forma_pagamento, @forma_pagamentos)
+    |> validate_inclusion(:forma_pagamento, @payment_methods)
     |> foreign_key_constraint(:numero_conta)
   end
 
   defp message_error_forma_pagamentos,
-    do: "Invalid payment method will only be accepted: #{Enum.join(@forma_pagamentos, ", ")}"
+    do: "Invalid payment method will only be accepted: #{Enum.join(@payment_methods, ", ")}"
 
   @doc """
     Retorna a taxa de acordo com o método de pagamento.
   """
-  def get_tax(forma_pagamento) when forma_pagamento in @forma_pagamentos do
-    atom_tax = Map.get(@map_tax, forma_pagamento)
+  def get_tax(forma_pagamento) when forma_pagamento in @payment_methods do
+    tax_atom = Map.get(@payment_method_taxes, forma_pagamento)
 
-    Application.get_env(:bank_digital_api, atom_tax)
+    Application.get_env(:bank_digital_api, tax_atom)
   end
 
   def get_tax(_forma_pagamento), do: :invalid_tax

@@ -90,7 +90,7 @@ defmodule BankDigitalApi.Service.TransactionTest do
     test "does not create transaction and returns error changeset with invalid data", %{
       account: account
     } do
-      assert {:error, :invalid_forma_pagamento} =
+      assert {:error, :invalid_payment_method} =
                Transaction.create_transaction(account, @invalid_attrs)
     end
 
@@ -99,7 +99,7 @@ defmodule BankDigitalApi.Service.TransactionTest do
     } do
       invalid_attrs = %{forma_pagamento: "X", valor: Decimal.new("100.00")}
 
-      assert {:error, :invalid_forma_pagamento} =
+      assert {:error, :invalid_payment_method} =
                Transaction.create_transaction(account, invalid_attrs)
     end
 

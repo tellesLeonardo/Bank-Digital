@@ -37,7 +37,7 @@ defmodule BankDigitalApiWeb.TransactionController do
         |> put_view(BankDigitalApiWeb.TransactionView)
         |> render("error.json", message: "saldo insuficiente")
 
-      {:error, :invalid_forma_pagamento} ->
+      {:error, :invalid_payment_method} ->
         conn
         |> put_status(:not_found)
         |> put_view(BankDigitalApiWeb.TransactionView)

@@ -9,7 +9,7 @@ defmodule BankDigitalApiWeb.TransactionControllerTest do
   @create_credito_attrs %{numero_conta: @numero_conta, forma_pagamento: "C", valor: "100.00"}
   @create_debito_attrs %{numero_conta: @numero_conta, forma_pagamento: "D", valor: "100.00"}
   @create_pix_attrs %{numero_conta: @numero_conta, forma_pagamento: "P", valor: "100.00"}
-  @invalid_forma_pagamento_attrs %{
+  @invalid_payment_method_attrs %{
     numero_conta: @numero_conta,
     forma_pagamento: "X",
     valor: "100.00"
@@ -75,7 +75,7 @@ defmodule BankDigitalApiWeb.TransactionControllerTest do
     end
 
     test "renders error when payment method is invalid", %{conn: conn} do
-      conn = post(conn, ~p"/transacao", @invalid_forma_pagamento_attrs)
+      conn = post(conn, ~p"/transacao", @invalid_payment_method_attrs)
       assert %{"error" => "forma de pagamento inválida"} = json_response(conn, 404)
     end
 
