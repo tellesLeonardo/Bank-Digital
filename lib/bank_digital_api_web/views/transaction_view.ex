@@ -3,9 +3,9 @@ defmodule BankDigitalApiWeb.TransactionView do
 
   def render("show.json", %{transaction: transaction}) do
     %{
-      numero_conta: transaction.account_number,
-      forma_pagamento: transaction.payment_method,
-      valor: transaction.amount,
+      numero_conta: transaction.numero_conta,
+      forma_pagamento: transaction.forma_pagamento,
+      valor: transaction.valor,
       message: "efetuada a transação",
       inserido_em: transaction.inserted_at
     }

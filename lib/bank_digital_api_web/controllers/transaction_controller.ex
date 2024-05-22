@@ -7,17 +7,17 @@ defmodule BankDigitalApiWeb.TransactionController do
   action_fallback BankDigitalApiWeb.FallbackController
 
   def create(conn, %{
-        "account_number" => account_number,
-        "payment_method" => payment_method,
-        "amount" => amount
+        "numero_conta" => numero_conta,
+        "forma_pagamento" => forma_pagamento,
+        "valor" => valor
       }) do
     transaction_map = %{
-      account_number: account_number,
-      payment_method: payment_method,
-      amount: amount
+      numero_conta: numero_conta,
+      forma_pagamento: forma_pagamento,
+      valor: valor
     }
 
-    with {:ok, account} <- Account.validate_account_exists(account_number),
+    with {:ok, account} <- Account.validate_account_exists(numero_conta),
          {:ok, %TransactionSchema{} = transaction} <-
            Transaction.create_transaction(account, transaction_map) do
       conn
@@ -37,7 +37,7 @@ defmodule BankDigitalApiWeb.TransactionController do
         |> put_view(BankDigitalApiWeb.TransactionView)
         |> render("error.json", message: "saldo insuficiente")
 
-      {:error, :invalid_payment_method} ->
+      {:error, :invalid_forma_pagamento} ->
         conn
         |> put_status(:not_found)
         |> put_view(BankDigitalApiWeb.TransactionView)

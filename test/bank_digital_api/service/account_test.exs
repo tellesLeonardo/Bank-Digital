@@ -6,9 +6,9 @@ defmodule BankDigitalApi.Service.AccountTest do
   alias BankDigitalApi.Service.Account
   alias BankDigitalApi.Schemas.Account, as: AccountSchema
 
-  @valid_attrs %{account_number: 1, balance: Decimal.new("1000.00")}
-  @update_attrs %{balance: Decimal.new("2000.00")}
-  @invalid_attrs %{account_number: nil, balance: nil}
+  @valid_attrs %{numero_conta: 1, saldo: Decimal.new("1000.00")}
+  @update_attrs %{saldo: Decimal.new("2000.00")}
+  @invalid_attrs %{numero_conta: nil, saldo: nil}
 
   describe "list_accounts/0" do
     test "returns all accounts" do
@@ -24,7 +24,7 @@ defmodule BankDigitalApi.Service.AccountTest do
   describe "validate_account_exists/1" do
     test "returns the account with given id" do
       account = insert(:account)
-      assert Account.validate_account_exists(account.account_number) == {:ok, account}
+      assert Account.validate_account_exists(account.numero_conta) == {:ok, account}
     end
 
     test "search for an account that does not exist" do
@@ -35,19 +35,19 @@ defmodule BankDigitalApi.Service.AccountTest do
   describe "create_account/1" do
     test "creates an account with valid data" do
       assert {:ok, %AccountSchema{} = account} = Account.create_account(@valid_attrs)
-      assert account.account_number == 1
-      assert account.balance == Decimal.new("1000.00")
+      assert account.numero_conta == 1
+      assert account.saldo == Decimal.new("1000.00")
     end
 
     test "does not create account and returns error changeset with invalid data" do
       assert {:error, %Ecto.Changeset{}} = Account.create_account(@invalid_attrs)
     end
 
-    test "fails to create account with duplicate account_number" do
+    test "fails to create account with duplicate numero_conta" do
       {:ok, %AccountSchema{} = _account} = Account.create_account(@valid_attrs)
       {:error, changeset} = Account.create_account(@valid_attrs)
 
-      assert changeset.errors[:account_number] ==
+      assert changeset.errors[:numero_conta] ==
                {"has already been taken",
                 [{:constraint, :unique}, {:constraint_name, "account_pkey"}]}
     end
@@ -57,13 +57,13 @@ defmodule BankDigitalApi.Service.AccountTest do
     test "updates the account with valid data" do
       account = insert(:account)
       assert {:ok, %AccountSchema{} = account} = Account.update_account(account, @update_attrs)
-      assert account.balance == Decimal.new("2000.00")
+      assert account.saldo == Decimal.new("2000.00")
     end
 
     test "does not update account and returns error changeset with invalid data" do
       account = insert(:account)
       assert {:error, %Ecto.Changeset{}} = Account.update_account(account, @invalid_attrs)
-      assert {:ok, account} == Account.validate_account_exists(account.account_number)
+      assert {:ok, account} == Account.validate_account_exists(account.numero_conta)
     end
   end
 
@@ -71,7 +71,7 @@ defmodule BankDigitalApi.Service.AccountTest do
     test "deletes the account" do
       account = insert(:account)
       assert {:ok, %AccountSchema{}} = Account.delete_account(account)
-      assert {:error, :not_found} == Account.validate_account_exists(account.account_number)
+      assert {:error, :not_found} == Account.validate_account_exists(account.numero_conta)
     end
   end
 

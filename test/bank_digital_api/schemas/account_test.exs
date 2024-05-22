@@ -3,8 +3,8 @@ defmodule BankDigitalApi.Schemas.AccountTest do
 
   alias BankDigitalApi.Schemas.Account
 
-  @valid_attrs %{account_number: 1, balance: 1000.00}
-  @invalid_attrs %{account_number: nil, balance: nil}
+  @valid_attrs %{numero_conta: 1, saldo: 1000.00}
+  @invalid_attrs %{numero_conta: nil, saldo: nil}
 
   test "changeset with valid attributes" do
     changeset = Account.changeset(%Account{}, @valid_attrs)
@@ -19,7 +19,7 @@ defmodule BankDigitalApi.Schemas.AccountTest do
   test "validates required fields" do
     changeset = Account.changeset(%Account{}, %{})
 
-    assert %{account_number: ["can't be blank"], balance: ["can't be blank"]} =
+    assert %{numero_conta: ["can't be blank"], saldo: ["can't be blank"]} =
              errors_on(changeset)
   end
 end

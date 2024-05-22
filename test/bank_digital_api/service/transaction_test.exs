@@ -6,8 +6,8 @@ defmodule BankDigitalApi.Service.TransactionTest do
   alias BankDigitalApi.Service.Transaction
   alias BankDigitalApi.Schemas.Transaction, as: TransactionSchema
 
-  @valid_attrs %{payment_method: "C", amount: Decimal.new("100.00")}
-  @invalid_attrs %{payment_method: nil, amount: nil}
+  @valid_attrs %{forma_pagamento: "C", valor: Decimal.new("100.00")}
+  @invalid_attrs %{forma_pagamento: nil, valor: nil}
 
   setup do
     account = insert(:account)
@@ -38,75 +38,75 @@ defmodule BankDigitalApi.Service.TransactionTest do
 
   describe "create_transaction/2" do
     test "create a transaction with valid data being a credit transaction", %{account: account} do
-      attrs = Map.put(@valid_attrs, :account_number, account.account_number)
+      attrs = Map.put(@valid_attrs, :numero_conta, account.numero_conta)
 
-      assert account.balance == Decimal.new("1000.00")
+      assert account.saldo == Decimal.new("1000.00")
 
       assert {:ok, %TransactionSchema{} = transaction} =
                Transaction.create_transaction(account, attrs)
 
-      assert transaction.account_number == account.account_number
-      assert transaction.payment_method == "C"
-      assert transaction.amount == Decimal.new("100.00")
-      assert transaction.account.balance == Decimal.new("895.00")
+      assert transaction.numero_conta == account.numero_conta
+      assert transaction.forma_pagamento == "C"
+      assert transaction.valor == Decimal.new("100.00")
+      assert transaction.account.saldo == Decimal.new("895.00")
     end
 
     test "create a transaction with valid data being a debit transaction", %{account: account} do
       attrs = %{
-        payment_method: "D",
-        amount: Decimal.new("100.00"),
-        account_number: account.account_number
+        forma_pagamento: "D",
+        valor: Decimal.new("100.00"),
+        numero_conta: account.numero_conta
       }
 
-      assert account.balance == Decimal.new("1000.00")
+      assert account.saldo == Decimal.new("1000.00")
 
       assert {:ok, %TransactionSchema{} = transaction} =
                Transaction.create_transaction(account, attrs)
 
-      assert transaction.account_number == account.account_number
-      assert transaction.payment_method == "D"
-      assert transaction.amount == Decimal.new("100.00")
-      assert transaction.account.balance == Decimal.new("897.00")
+      assert transaction.numero_conta == account.numero_conta
+      assert transaction.forma_pagamento == "D"
+      assert transaction.valor == Decimal.new("100.00")
+      assert transaction.account.saldo == Decimal.new("897.00")
     end
 
     test "create a transaction with valid data being a transaction per pix", %{account: account} do
       attrs = %{
-        payment_method: "P",
-        amount: Decimal.new("100.00"),
-        account_number: account.account_number
+        forma_pagamento: "P",
+        valor: Decimal.new("100.00"),
+        numero_conta: account.numero_conta
       }
 
-      assert account.balance == Decimal.new("1000.00")
+      assert account.saldo == Decimal.new("1000.00")
 
       assert {:ok, %TransactionSchema{} = transaction} =
                Transaction.create_transaction(account, attrs)
 
-      assert transaction.account_number == account.account_number
-      assert transaction.payment_method == "P"
-      assert transaction.amount == Decimal.new("100.00")
-      assert transaction.account.balance == Decimal.new("900.00")
+      assert transaction.numero_conta == account.numero_conta
+      assert transaction.forma_pagamento == "P"
+      assert transaction.valor == Decimal.new("100.00")
+      assert transaction.account.saldo == Decimal.new("900.00")
     end
 
     test "does not create transaction and returns error changeset with invalid data", %{
       account: account
     } do
-      assert {:error, :invalid_payment_method} =
+      assert {:error, :invalid_forma_pagamento} =
                Transaction.create_transaction(account, @invalid_attrs)
     end
 
     test "does not create transaction and returns error with invalid payment method", %{
       account: account
     } do
-      invalid_attrs = %{payment_method: "X", amount: Decimal.new("100.00")}
+      invalid_attrs = %{forma_pagamento: "X", valor: Decimal.new("100.00")}
 
-      assert {:error, :invalid_payment_method} =
+      assert {:error, :invalid_forma_pagamento} =
                Transaction.create_transaction(account, invalid_attrs)
     end
 
-    test "does not create transaction and returns error with insufficient balance", %{
+    test "does not create transaction and returns error with insufficient saldo", %{
       account: account
     } do
-      invalid_attrs = %{payment_method: "P", amount: Decimal.new("2000.00")}
+      invalid_attrs = %{forma_pagamento: "P", valor: Decimal.new("2000.00")}
 
       assert {:error, :insufficient_funds} =
                Transaction.create_transaction(account, invalid_attrs)
@@ -135,18 +135,18 @@ defmodule BankDigitalApi.Service.TransactionTest do
 
   describe "validate_sufficient_funds/3" do
     test "returns :ok when there are sufficient funds", %{account: account} do
-      assert {:ok, _total_amount} =
+      assert {:ok, _total_valor} =
                Transaction.validate_sufficient_funds(account, %{
-                 amount: Decimal.new("100.00"),
-                 payment_method: "C"
+                 valor: Decimal.new("100.00"),
+                 forma_pagamento: "C"
                })
     end
 
     test "returns :error when there are insufficient funds", %{account: account} do
       assert {:error, :insufficient_funds} =
                Transaction.validate_sufficient_funds(account, %{
-                 amount: Decimal.new("10000.00"),
-                 payment_method: "C"
+                 valor: Decimal.new("10000.00"),
+                 forma_pagamento: "C"
                })
     end
   end

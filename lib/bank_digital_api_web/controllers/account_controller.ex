@@ -8,7 +8,7 @@ defmodule BankDigitalApiWeb.AccountController do
 
   def create(conn, attrs) do
     with {:error, :not_found} <-
-           Account.validate_account_exists(attrs["account_number"]) do
+           Account.validate_account_exists(attrs["numero_conta"]) do
       case Account.create_account(attrs) do
         {:ok, account} ->
           conn
@@ -31,8 +31,8 @@ defmodule BankDigitalApiWeb.AccountController do
     end
   end
 
-  def show(conn, %{"account_number" => account_number}) do
-    case Account.validate_account_exists(account_number) do
+  def show(conn, %{"numero_conta" => numero_conta}) do
+    case Account.validate_account_exists(numero_conta) do
       {:ok, account} ->
         conn
         |> put_status(:ok)

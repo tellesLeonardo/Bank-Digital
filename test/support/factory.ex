@@ -5,8 +5,8 @@ defmodule BankDigitalApi.Factory do
 
   def account_factory do
     %Account{
-      account_number: sequence(:account_number, & &1),
-      balance: Decimal.new("1000.00")
+      numero_conta: sequence(:numero_conta, & &1),
+      saldo: Decimal.new("1000.00")
     }
   end
 
@@ -14,9 +14,9 @@ defmodule BankDigitalApi.Factory do
     account = insert(:account)
 
     %Transaction{
-      account_number: account.account_number,
-      payment_method: "C",
-      amount: Decimal.new("100.00"),
+      numero_conta: account.numero_conta,
+      forma_pagamento: "C",
+      valor: Decimal.new("100.00"),
       timestamp: NaiveDateTime.utc_now()
     }
   end

@@ -45,12 +45,12 @@ defmodule BankDigitalApi.Service.Transaction do
   end
 
   @doc """
-    Retorna um tupla informando quanto é o valor de amount com taxa
+    Retorna um tupla informando quanto é o valor de valor com taxa
   """
   def validate_sufficient_funds(%AccountSchema{} = account, attrs) do
-    with {:ok, total_amount} <- calculate_total_amount(attrs.amount, attrs.payment_method),
-         :ok <- ensure_sufficient_funds(account, total_amount) do
-      {:ok, total_amount}
+    with {:ok, total_valor} <- calculate_total_valor(attrs.valor, attrs.forma_pagamento),
+         :ok <- ensure_sufficient_funds(account, total_valor) do
+      {:ok, total_valor}
     else
       {:error, _} = error -> error
     end
@@ -62,11 +62,11 @@ defmodule BankDigitalApi.Service.Transaction do
 
   def create_transaction(%AccountSchema{} = account, attrs) do
     Repo.transaction(fn ->
-      with {:ok, total_amount} <- validate_sufficient_funds(account, attrs),
+      with {:ok, total_valor} <- validate_sufficient_funds(account, attrs),
            {:ok, %Transaction{} = transaction} <- create_and_insert_transaction(attrs),
            {:ok, %AccountSchema{} = updated_account} <-
              Account.update_account(account, %{
-               balance: Decimal.sub(account.balance, total_amount) |> Decimal.round(2)
+               saldo: Decimal.sub(account.saldo, total_valor) |> Decimal.round(2)
              }) do
         %{transaction | account: updated_account}
       else
@@ -82,24 +82,24 @@ defmodule BankDigitalApi.Service.Transaction do
     |> Repo.insert()
   end
 
-  defp calculate_total_amount(amount, payment_method) do
-    case Transaction.get_tax(payment_method) do
+  defp calculate_total_valor(valor, forma_pagamento) do
+    case Transaction.get_tax(forma_pagamento) do
       :invalid_tax ->
-        {:error, :invalid_payment_method}
+        {:error, :invalid_forma_pagamento}
 
       tax ->
-        tax_value = Decimal.mult(amount, Decimal.new(tax))
+        tax_value = Decimal.mult(valor, Decimal.new(tax))
 
-        total_amount =
-          amount
+        total_valor =
+          valor
           |> Decimal.add(tax_value)
           |> Decimal.round(2)
 
-        {:ok, total_amount}
+        {:ok, total_valor}
     end
   end
 
-  defp ensure_sufficient_funds(%AccountSchema{balance: balance}, total_amount) do
-    if Decimal.compare(balance, total_amount) != :lt, do: :ok, else: {:error, :insufficient_funds}
+  defp ensure_sufficient_funds(%AccountSchema{saldo: saldo}, total_valor) do
+    if Decimal.compare(saldo, total_valor) != :lt, do: :ok, else: {:error, :insufficient_funds}
   end
 end
