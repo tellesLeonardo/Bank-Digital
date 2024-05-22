@@ -8,7 +8,7 @@ defmodule BankDigitalApiWeb.Router do
   scope "/", BankDigitalApiWeb do
     pipe_through :api
 
-    get "/conta:account_number", AccountController, :show
+    get "/conta", AccountController, :show
     post "/conta", AccountController, :create
     post "/transacao", TransactionController, :create
   end

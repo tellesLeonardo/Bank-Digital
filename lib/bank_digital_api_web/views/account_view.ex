@@ -3,8 +3,8 @@ defmodule BankDigitalApiWeb.AccountView do
 
   def render("show.json", %{account: account}) do
     %{
-      account_number: account.account_number,
-      balance: account.balance
+      numero_conta: account.account_number,
+      saldo: account.balance
     }
   end
 end

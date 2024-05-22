@@ -3,12 +3,11 @@ defmodule BankDigitalApiWeb.TransactionView do
 
   def render("show.json", %{transaction: transaction}) do
     %{
-      id: transaction.id,
-      account_number: transaction.account_number,
-      payment_method: transaction.payment_method,
-      amount: transaction.amount,
-      balance_after_transaction: transaction.balance_after_transaction,
-      inserted_at: transaction.inserted_at
+      numero_conta: transaction.account_number,
+      forma_pagamento: transaction.payment_method,
+      valor: transaction.amount,
+      message: "efetuada a transação",
+      inserido_em: transaction.inserted_at
     }
   end
 
