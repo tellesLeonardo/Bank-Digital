@@ -2,7 +2,9 @@ defmodule BankDigitalApiWeb.ErrorJSONTest do
   use BankDigitalApiWeb.ConnCase, async: true
 
   test "renders 404" do
-    assert BankDigitalApiWeb.ErrorJSON.render("404.json", %{}) == %{errors: %{detail: "Not Found"}}
+    assert BankDigitalApiWeb.ErrorJSON.render("404.json", %{}) == %{
+             errors: %{detail: "Not Found"}
+           }
   end
 
   test "renders 500" do
