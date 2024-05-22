@@ -4,7 +4,6 @@ import Config
 config :bank_digital_api, BankDigitalApi.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "localhost",
   hostname: System.get_env("HOST", "localhost"),
   port: System.get_env("PORT", "5432"),
   stacktrace: true,
