@@ -62,8 +62,8 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :bank_digital_api,
-  tax_credito: "0.03",
-  tax_debito: "0.05",
+  tax_credito: "0.05",
+  tax_debito: "0.03",
   tax_pix: "0.0"
 
 # Import environment specific config. This must remain at the bottom

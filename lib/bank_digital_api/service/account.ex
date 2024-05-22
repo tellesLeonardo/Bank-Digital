@@ -16,6 +16,8 @@ defmodule BankDigitalApi.Service.Account do
   @doc """
     Retorna uma conta de usuário pelo número da conta
   """
+  def validate_account_exists(nil), do: {:error, :not_found}
+
   def validate_account_exists(account_number) do
     case Repo.get(Account, account_number) do
       nil -> {:error, :not_found}
